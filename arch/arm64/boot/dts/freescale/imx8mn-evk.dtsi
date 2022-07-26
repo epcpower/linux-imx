@@ -613,6 +613,15 @@
 		>;
 	};
 
+	pinctrl_ecspi2: ecspi2grp {
+		fsl,pins = <
+			MX8MN_IOMUXC_ECSPI2_SCLK_ECSPI2_SCLK 0x156
+			MX8MN_IOMUXC_ECSPI2_MOSI_ECSPI2_MOSI 0x156
+			MX8MN_IOMUXC_ECSPI2_MISO_ECSPI2_MISO 0x156
+			MX8MN_IOMUXC_ECSPI2_SS0_ECSPI2_SS0 0x156
+		>;
+	};
+
 	pinctrl_gpio_led: gpioledgrp {
 		fsl,pins = <
 			MX8MN_IOMUXC_NAND_READY_B_GPIO3_IO16	0x19
@@ -910,5 +919,17 @@
 			MX8MN_IOMUXC_GPIO1_IO00_ANAMIX_REF_CLK_32K	0x141
 			MX8MN_IOMUXC_SD1_DATA7_GPIO2_IO9		0x159
 		>;
+	};
+};
+
+&ecspi2 {
+	pinctrl-names = "default";
+	pinctrl-0 = <&pinctrl_ecspi2>;
+	status = "okay";
+	/delete-property/ cs-gpios;
+	spi-slave;
+
+	slave {
+		compatible = "fsl,imx8mn-ecspi", "fsl,imx51-ecspi";
 	};
 };
