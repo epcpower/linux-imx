@@ -378,6 +378,9 @@ static int imx_irqsteer_runtime_resume(struct device *dev)
 
 	return 0;
 }
+#else
+	#define imx_irqsteer_runtime_suspend NULL
+	#define imx_irqsteer_runtime_resume NULL
 #endif
 
 static const struct dev_pm_ops imx_irqsteer_pm_ops = {
