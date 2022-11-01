@@ -491,7 +491,9 @@
 	assigned-clocks = <&clk IMX8MN_CLK_UART3>;
 	assigned-clock-parents = <&clk IMX8MN_SYS_PLL1_80M>;
 	fsl,uart-has-rtscts;
-	status = "okay";
+	// disabled because conflicts with ECSPI1
+	// status = "okay";
+	status = "disabled";
 };
 
 &usdhc1 {
@@ -779,6 +781,15 @@
 		>;
 	};
 
+	pinctrl_ecspi1: ecspi1grp {
+		fsl,pins = <
+			MX8MN_IOMUXC_ECSPI1_SCLK_ECSPI1_SCLK 0x156  // j1003#10
+			MX8MN_IOMUXC_ECSPI1_MOSI_ECSPI1_MOSI 0x156  // j1003#8
+			MX8MN_IOMUXC_ECSPI1_SS0_ECSPI1_SS0 0x156    // j1003#11
+			MX8MN_IOMUXC_ECSPI1_MISO_ECSPI1_MISO 0x156  // j1003#7
+		>;
+	};
+
 	pinctrl_usdhc1_gpio: usdhc1grpgpio {
 		fsl,pins = <
 			MX8MN_IOMUXC_SD1_RESET_B_GPIO2_IO10	0x41
@@ -922,6 +933,18 @@
 	};
 };
 
+&ecspi1 {
+	pinctrl-names = "default";
+	pinctrl-0 = <&pinctrl_ecspi1>;
+	status = "okay";
+
+	master {
+		compatible = "fsl,imx8mn-ecspi", "fsl,imx51-ecspi", "linux,spi-loopback-test";
+		spi-max-frequency = <1000000>;
+		reg = <0>;
+	};
+};
+
 &ecspi2 {
 	pinctrl-names = "default";
 	pinctrl-0 = <&pinctrl_ecspi2>;
@@ -931,5 +954,6 @@
 
 	slave {
 		compatible = "fsl,imx8mn-ecspi", "fsl,imx51-ecspi";
+		spi-max-frequency = <1000000>;
 	};
 };
