@@ -23,6 +23,14 @@
 		};
 	};
 
+	pps {
+		compatible = "pps-gpio";
+		pinctrl-names = "default";
+		pinctrl-0 = <&pinctrl_pps>;
+		gpios = <&gpio3 22 GPIO_ACTIVE_HIGH>;
+		status = "okay";
+	};
+
 	memory@40000000 {
 		device_type = "memory";
 		reg = <0x0 0x40000000 0 0x80000000>;
@@ -931,6 +939,12 @@
 			MX8MN_IOMUXC_SD1_DATA7_GPIO2_IO9		0x159
 		>;
 	};
+
+	pinctrl_pps: ppsgrp {
+		fsl,pins = <
+			MX8MN_IOMUXC_SAI5_RXD1_GPIO3_IO22    		0x141 /* PPS for testing */
+		>;
+	};
 };
 
 &ecspi1 {
@@ -957,3 +971,4 @@
 		spi-max-frequency = <1000000>;
 	};
 };
+ 
