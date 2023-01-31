@@ -258,7 +258,7 @@ static int xilinx_spi_probe(struct spi_device *spi)
 
 #ifdef CONFIG_OF
 static const struct of_device_id xlnx_spi_of_match[] = {
-	{ .compatible = "xlnx,fpga-slave-serial", },
+	{ .compatible = "xlnx,xlnx-slave-spi", },
 	{}
 };
 MODULE_DEVICE_TABLE(of, xlnx_spi_of_match);

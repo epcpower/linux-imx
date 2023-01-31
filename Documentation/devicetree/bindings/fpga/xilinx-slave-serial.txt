@@ -11,7 +11,7 @@ See:
 - https://www.xilinx.com/support/documentation/application_notes/xapp583-fpga-configuration.pdf
 
 Required properties:
-- compatible: should contain "xlnx,fpga-slave-serial"
+- compatible: should contain "xlnx,xlnx-slave-spi"
 - reg: spi chip select of the FPGA
 - prog_b-gpios: config pin (referred to as PROGRAM_B in the manual)
 - done-gpios: config status pin (referred to as DONE in the manual)
@@ -40,7 +40,7 @@ Example for full FPGA configuration:
 		clocks = <&coreclk 0>;
 
 		fpga_mgr_spi: fpga-mgr@0 {
-			compatible = "xlnx,fpga-slave-serial";
+			compatible = "xlnx,xlnx-slave-spi";
 			spi-max-frequency = <60000000>;
 			spi-cpha;
 			reg = <0>;
