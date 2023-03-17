@@ -23,6 +23,7 @@
 #include <linux/crc32.h>
 #include <asm/unaligned.h>
 #include <asm/bitsperlong.h>
+#include <soc/imx/soc.h>
 
 #ifdef __KERNEL__
 struct device;
@@ -214,6 +215,58 @@ static inline bool eth_proto_is_802_3(__be16 proto)
 }
 
 /**
+ * @brief Calculate CR-48 bit checksum.
+ *
+ * @param str    Message to digest.
+ * @return       Calculated checksum.
+ */
+static inline unsigned long int crc48(const char *str)
+{
+	u64 crc = 0;
+	u8 c;
+	u8 b;
+	int i;
+
+	while ((c = *str++)) {
+		for (i = 0; i < 8; ++i) {
+			b = (c ^ crc) & 0x1;
+			crc >>= 1;
+			if (b)
+				crc ^= 0xedcafebeefed;
+			c >>= 1;
+		}
+	}
+
+	return crc;
+}
+
+/**
+ * eth_imx_serial_addr - Generate reproduceable Ethernet address from imx-soc
+ * serial number.
+ * @addr: Pointer to a six-byte array containing the Ethernet address
+ * @serial_number: i.MX SoC serial number.
+ *
+ * Generates Ethernet address (MAC) similar to eth_random_addr() that is not 
+ * multicast and has the local assigned bit set.
+ */
+static inline void eth_imx_serial_addr(u8 *addr)
+{
+	char serial[40];
+	u64 hash;
+	u8 n = 6;
+	int i;
+
+	imx8_get_soc_serial_number(serial);
+
+	hash = crc48(serial);
+	for (i = 0; i < n; ++i) {
+		addr[i] = (hash >> ((n - i - 1) * 8)) & 0xff;
+	}
+
+	pr_info("MAC address generated from i.MX SoC serial: %s", serial);
+}
+
+/**
  * eth_random_addr - Generate software assigned random Ethernet address
  * @addr: Pointer to a six-byte array containing the Ethernet address
  *
@@ -222,7 +275,11 @@ static inline bool eth_proto_is_802_3(__be16 proto)
  */
 static inline void eth_random_addr(u8 *addr)
 {
+#ifdef CONFIG_ARCH_MXC
+	eth_imx_serial_addr(addr);
+#else
 	get_random_bytes(addr, ETH_ALEN);
+#endif  /* CONFIG_ARCH_MXC */
 	addr[0] &= 0xfe;	/* clear multicast bit */
 	addr[0] |= 0x02;	/* set local assignment bit (IEEE802) */
 }

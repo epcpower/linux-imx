@@ -45,6 +45,7 @@ struct imx8_soc_data {
 	u32 (*soc_revision)(void);
 };
 
+static char imx8_soc_serial_number[40];
 static u64 soc_uid;
 
 #ifdef CONFIG_HAVE_ARM_SMCCC
@@ -236,6 +237,7 @@ static int __init imx8_soc_init(void)
 		ret = -ENOMEM;
 		goto free_rev;
 	}
+	strcpy(imx8_soc_serial_number, soc_dev_attr->serial_number);
 
 	soc_dev = soc_device_register(soc_dev_attr);
 	if (IS_ERR(soc_dev)) {
@@ -243,8 +245,8 @@ static int __init imx8_soc_init(void)
 		goto free_serial_number;
 	}
 
-	pr_info("SoC: %s revision %s, serialn: %s\n", soc_dev_attr->soc_id,
-		soc_dev_attr->revision, soc_dev_attr->serial_number);
+	pr_info("SoC: %s revision %s, serialn: %s (%p)\n", soc_dev_attr->soc_id,
+		soc_dev_attr->revision, imx8_soc_serial_number, imx8_soc_serial_number);
 
 	if (IS_ENABLED(CONFIG_ARM_IMX_CPUFREQ_DT))
 		platform_device_register_simple("imx-cpufreq-dt", -1, NULL, 0);
@@ -292,6 +294,12 @@ int check_m4_enabled(void)
 	return 0;
 }
 EXPORT_SYMBOL_GPL(check_m4_enabled);
+
+void imx8_get_soc_serial_number(char *serial)
+{
+	strcpy(serial, imx8_soc_serial_number);
+}
+EXPORT_SYMBOL_GPL(imx8_get_soc_serial_number);
 
 MODULE_DESCRIPTION("i.MX8M SoC driver");
 MODULE_LICENSE("GPL v2");
