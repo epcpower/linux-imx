@@ -1800,10 +1800,12 @@ exit:
 
 	release_firmware(fw);
 
+#ifdef CONFIG_PM_SLEEP
 	if (info->imem_mgmt && info->imem_save_rfs) {
 		priv->imem.size = save_imem(priv->dev);
 		se_save_imem_to_file(info->imem_save_rfs, priv->imem.buf, priv->imem.size);
 	}
+#endif
 }
 
 static void se_load_imem_file(const struct firmware *fw, void *context)
@@ -1836,8 +1838,10 @@ static void se_load_imem_file(const struct firmware *fw, void *context)
 	memcpy(priv->imem.buf, fw->data, fw->size);
 	priv->imem.size = fw->size;
 
+#ifdef CONFIG_PM_SLEEP
 	restore_imem(priv->dev, info->pool_name);
 	dev_dbg(priv->dev, "restore imem done\n");
+#endif
 
 	release_firmware(fw);
 }
@@ -1870,10 +1874,12 @@ static void se_save_imem_file(const struct firmware *fw, void *context)
 	dev_dbg(priv->dev, "check imem file ok, size 0x%lx\n", fw->size);
 	release_firmware(fw);
 
+#ifdef CONFIG_PM_SLEEP
 	priv->imem.size = save_imem(priv->dev);
 	se_save_imem_to_file(info->imem_save_rfs, priv->imem.buf, priv->imem.size);
 
 	dev_dbg(priv->dev, "save imem file done\n");
+#endif
 }
 
 static int se_fw_probe(struct platform_device *pdev)
