@@ -110,10 +110,16 @@
 };
 
 &ecspi1 {
-	/* FPGA SSPI */
 	pinctrl-names = "default";
 	pinctrl-0 = <&pinctrl_fpga_spi1>;
 	status = "okay";
+
+	/* FPGA configuration */
+	spidev@0 {
+		compatible = "fsl,imx8mn-ecspi", "fsl,imx51-ecspi";
+		spi-max-frequency = <5000000>;
+		reg = <0>;
+	};
 
 	/* Lattice LCMXO2 Slave Serial */
 	fpga_mgr_spi: fpga-mgr@0 {
@@ -132,6 +138,12 @@
 	pinctrl-names = "default";
 	pinctrl-0 = <&pinctrl_fpga_spi2>;
 	status = "okay";
+
+	spidev@0 {
+		compatible = "fsl,imx8mn-ecspi", "fsl,imx51-ecspi";
+		spi-max-frequency = <5000000>;
+		reg = <0>;
+	};
 };
 
 &eqos {
