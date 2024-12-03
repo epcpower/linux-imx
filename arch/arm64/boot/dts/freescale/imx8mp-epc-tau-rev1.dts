@@ -122,11 +122,10 @@
 	};
 
 	/* Lattice LCMXO2 Slave Serial */
-	fpga_mgr_spi: fpga-mgr@0 {
+	fpga_mgr_spi: fpga-mgr@1 {
 		compatible = "lattice,machxo2-slave-spi";
-		spi-max-frequency = <60000000>;
-		spi-cpha;
-		reg = <0>;
+		spi-max-frequency = <8000000>;
+		reg = <1>;
 		prog_b-gpios = <&gpio4 28 GPIO_ACTIVE_LOW>;
 		init-b-gpios = <&gpio4 30 GPIO_ACTIVE_LOW>;
 		done-gpios   = <&gpio4 29 GPIO_ACTIVE_HIGH>;
