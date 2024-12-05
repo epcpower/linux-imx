@@ -154,11 +154,11 @@
 		ethphy0: ethernet-phy@0 {
 			reg = <0>;
 			compatible = "ethernet-phy-id0007.0572";
-			reset-gpios = <&gpio3 23 GPIO_ACTIVE_LOW>;  /* ENET_nRST */
+			reset-gpios = <&gpio4 22 GPIO_ACTIVE_LOW>;  /* ENET_nRST */
 			reset-assert-us = <500>;
 			reset-deassert-us = <500>;
-			interrupt-parent = <&gpio4>;
-			interrupts = <22 IRQ_TYPE_LEVEL_LOW>;  /* ENET_nINT */
+			interrupt-parent = <&gpio3>;
+			interrupts = <23 IRQ_TYPE_LEVEL_LOW>;  /* ENET_nINT */
 			vsc8531,led-0-mode = <VSC8531_LINK_100_1000_ACTIVITY>;
 			vsc8531,led-1-mode = <VSC8531_LINK_ACTIVITY>;
 			vsc8531,led-0-combine-disable;
@@ -521,8 +521,8 @@
 			MX8MP_IOMUXC_ENET_TD2__ENET_QOS_RGMII_TD2			0x16
 			MX8MP_IOMUXC_ENET_TD3__ENET_QOS_RGMII_TD3			0x16
 			MX8MP_IOMUXC_ENET_TX_CTL__ENET_QOS_RGMII_TX_CTL			0x16
-			MX8MP_IOMUXC_SAI2_RXC__GPIO4_IO22		0x29	/* ENET_nINT */
-			MX8MP_IOMUXC_SAI5_RXD2__GPIO3_IO23		0x10	/* ENET_nRST */
+			MX8MP_IOMUXC_SAI5_RXD2__GPIO3_IO23		0x29	/* ENET_nINT */
+			MX8MP_IOMUXC_SAI2_RXC__GPIO4_IO22		0x10	/* ENET_nRST */
 
 		>;
 	};
