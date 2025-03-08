@@ -69,6 +69,46 @@ void scatterwalk_map_and_copy(void *buf, struct scatterlist *sg,
 }
 EXPORT_SYMBOL_GPL(scatterwalk_map_and_copy);
 
+void memcpy_sglist(struct scatterlist *dst, struct scatterlist *src,
+		   unsigned int nbytes)
+{
+	struct scatter_walk swalk;
+	struct scatter_walk dwalk;
+
+	if (unlikely(nbytes == 0)) /* in case sg == NULL */
+		return;
+
+	scatterwalk_start(&swalk, src);
+	scatterwalk_start(&dwalk, dst);
+
+	while (nbytes) {
+		unsigned int slen = scatterwalk_clamp(&swalk, nbytes);
+		unsigned int dlen = scatterwalk_clamp(&dwalk, nbytes);
+		unsigned int n = min(slen, dlen);
+		void *saddr, *daddr;
+
+		/* Map both pages into virtual memory */
+		saddr = scatterwalk_map(&swalk);
+		daddr = scatterwalk_map(&dwalk);
+
+		memcpy(daddr, saddr, n);
+
+		/* Unmap and advance the pointers */
+		scatterwalk_unmap(daddr);
+		scatterwalk_unmap(saddr);
+
+		scatterwalk_advance(&swalk, n);
+		scatterwalk_advance(&dwalk, n);
+
+		/* Handle page boundaries/flushing */
+		scatterwalk_pagedone(&swalk, 0, nbytes > n);
+		scatterwalk_pagedone(&dwalk, 1, nbytes > n);
+
+		nbytes -= n;
+	}
+}
+EXPORT_SYMBOL_GPL(memcpy_sglist);
+
 struct scatterlist *scatterwalk_ffwd(struct scatterlist dst[2],
 				     struct scatterlist *src,
 				     unsigned int len)
