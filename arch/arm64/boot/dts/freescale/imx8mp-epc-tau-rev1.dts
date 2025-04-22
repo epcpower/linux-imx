@@ -119,9 +119,6 @@
 		compatible = "lattice,machxo2-slave-spi";
 		spi-max-frequency = <20000000>;
 		reg = <0>;
-		prog_b-gpios = <&gpio4 28 GPIO_ACTIVE_LOW>;
-		init-b-gpios = <&gpio4 30 GPIO_ACTIVE_LOW>;
-		done-gpios   = <&gpio4 29 GPIO_ACTIVE_HIGH>;
 	};
 };
 
