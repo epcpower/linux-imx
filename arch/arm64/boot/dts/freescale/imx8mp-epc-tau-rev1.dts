@@ -320,11 +320,9 @@
     };
 
 	/* Ambient Temp/Humidity Sensor */
-	si7021-a20@40 {
-		compatible = "silabs,si7020";
-		/* could also select: */
-		// compatible = "si,si7021a20";
-		reg = <0x40>;
+	humidity-sensor@44 {
+		compatible = "ti,hdc3021", "ti,hdc3020";
+		reg = <0x44>;
 	};
 };
 
