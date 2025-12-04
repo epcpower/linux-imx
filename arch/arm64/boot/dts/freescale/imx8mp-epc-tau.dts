@@ -1,0 +1,269 @@
+// SPDX-License-Identifier: (GPL-2.0+ OR MIT)
+/*
+ * Copyright 2025 EPC Power
+ * 
+ * Device tree for EPC Power MOAB
+ */
+
+/dts-v1/;
+
+#include "imx8mp-epc-tau.dtsi"
+
+/ {
+	aliases {
+		rtc0 = &rtc;
+	};
+};
+
+&ecspi1 {
+	/* Lattice LCMXO2 Slave Serial */
+	fpga_mgr_spi: fpga-mgr@0 {
+		compatible = "lattice,machxo2-slave-spi";
+		spi-max-frequency = <20000000>;
+		reg = <0>;
+		prog_b-gpios = <&gpio4 28 GPIO_ACTIVE_LOW>;
+		init-b-gpios = <&gpio4 30 GPIO_ACTIVE_LOW>;
+		done-gpios   = <&gpio4 29 GPIO_ACTIVE_HIGH>;
+	};
+};
+
+&ecspi2 {
+	/* FPGA comms */
+	spidev@0 {
+		compatible = "fsl,imx8mn-ecspi", "fsl,imx51-ecspi";
+		spi-max-frequency = <5000000>;
+		reg = <0>;
+	};
+};
+
+&eqos {
+	mdio {
+		compatible = "snps,dwmac-mdio";
+		#address-cells = <1>;
+		#size-cells = <0>;
+
+		ethphy0: ethernet-phy@0 {
+			reg = <0>;
+			compatible = "ethernet-phy-id0007.0572";
+			reset-gpios = <&gpio4 22 GPIO_ACTIVE_LOW>;  /* ENET_nRST */
+			reset-assert-us = <500>;
+			reset-deassert-us = <500>;
+			interrupt-parent = <&gpio3>;
+			interrupts = <23 IRQ_TYPE_LEVEL_LOW>;  /* ENET_nINT */
+			vsc8531,led-0-mode = <VSC8531_LINK_100_1000_ACTIVITY>;
+			vsc8531,led-1-mode = <VSC8531_LINK_ACTIVITY>;
+			vsc8531,led-0-combine-disable;
+		};
+	};
+};
+
+&fec {
+	mdio {
+		#address-cells = <1>;
+		#size-cells = <0>;
+
+		ethphy1: ethernet-phy@0 {
+			reg = <0>;
+			compatible = "ethernet-phy-id0007.0572";
+			reset-gpios = <&gpio4 23 GPIO_ACTIVE_LOW>;  /* ENET1_nRST */
+			reset-assert-us = <500>;
+			reset-deassert-us = <500>;
+			interrupt-parent = <&gpio4>;
+			interrupts = <3 IRQ_TYPE_LEVEL_LOW>;  /* ENET1_nINT */
+			vsc8531,led-0-mode = <VSC8531_LINK_100_1000_ACTIVITY>;
+			vsc8531,led-1-mode = <VSC8531_LINK_ACTIVITY>;
+			vsc8531,led-0-combine-disable;
+		};
+	};
+};
+
+&i2c2 {
+	/* Real-Time Clock (RTC) with 3V3 backup battery */
+	rtc: rtc@51 {
+		compatible = "nxp,pcf85363";
+		reg = <0x51>;
+    };
+
+	/* Ambient Temp/Humidity Sensor */
+	humidity-sensor@44 {
+		compatible = "ti,hdc3021", "ti,hdc3020";
+		reg = <0x44>;
+	};
+};
+
+&i2c3 {
+	adc@48 {
+		compatible= "ti,ads1115";
+		reg = <0x48>;
+		#address-cells = <1>;
+		#size-cells = <0>;
+
+		channel@4 {
+			reg = <4>;
+			ti,gain = <1>;
+			ti,datarate = <4>;
+		};
+
+		channel@5 {
+			reg = <5>;
+			ti,gain = <1>;
+			ti,datarate = <4>;
+		};
+
+		channel@6 {
+			reg = <6>;
+			ti,gain = <1>;
+			ti,datarate = <4>;
+		};
+
+		channel@7 {
+			reg = <7>;
+			ti,gain = <1>;
+			ti,datarate = <4>;
+		};
+	};
+
+	adc@49 {
+		compatible = "ti,ads1115";
+		reg = <0x49>;
+		#address-cells = <1>;
+		#size-cells = <0>;
+
+		channel@4 {
+			reg = <4>;
+			ti,gain = <1>;
+			ti,datarate = <4>;
+		};
+
+		channel@5 {
+			reg = <5>;
+			ti,gain = <1>;
+			ti,datarate = <4>;
+		};
+
+		channel@6 {
+			reg = <6>;
+			ti,gain = <1>;
+			ti,datarate = <4>;
+		};
+
+		channel@7 {
+			reg = <7>;
+			ti,gain = <1>;
+			ti,datarate = <4>;
+		};
+	};
+
+	adc@4a {
+		compatible = "ti,ads1115";
+		reg = <0x4A>;
+		#address-cells = <1>;
+		#size-cells = <0>;
+
+		channel@4 {
+			reg = <4>;
+			ti,gain = <1>;
+			ti,datarate = <4>;
+		};
+
+		channel@5 {
+			reg = <5>;
+			ti,gain = <1>;
+			ti,datarate = <4>;
+		};
+
+		channel@6 {
+			reg = <6>;
+			ti,gain = <1>;
+			ti,datarate = <4>;
+		};
+
+		channel@7 {
+			reg = <7>;
+			ti,gain = <1>;
+			ti,datarate = <4>;
+		};
+	};
+
+	adc@4b {
+		compatible = "ti,ads1115";
+		reg = <0x4B>;
+		#address-cells = <1>;
+		#size-cells = <0>;
+		channel@4 {
+			reg = <4>;
+			ti,gain = <1>;
+			ti,datarate = <4>;
+		};
+		channel@5 {
+			reg = <5>;
+			ti,gain = <1>;
+			ti,datarate = <4>;
+		};
+		channel@6 {
+			reg = <6>;
+			ti,gain = <1>;
+			ti,datarate = <4>;
+		};
+		channel@7 {
+			reg = <7>;
+			ti,gain = <1>;
+			ti,datarate = <4>;
+		};
+	};
+};
+
+&uart1 {
+	/* FPGA UART */
+	pinctrl-names = "default";
+	pinctrl-0 = <&pinctrl_uart1>;
+	status = "okay";
+};
+
+
+&uart2 {
+	/* console */
+	pinctrl-names = "default";
+	pinctrl-0 = <&pinctrl_uart2>;
+	status = "okay";
+};
+
+&uart3 {
+	/* spare */
+	pinctrl-names = "default";
+	pinctrl-0 = <&pinctrl_uart3>;
+	status = "disabled";
+};
+
+&usb3_phy0 {
+	fsl,phy-tx-vref-tune = <0xe>;
+	fsl,phy-tx-preemp-amp-tune = <3>;
+	fsl,phy-tx-vboost-level = <5>;
+	fsl,phy-comp-dis-tune = <7>;
+	fsl,pcs-tx-deemph-3p5db = <0x21>;
+	fsl,phy-pcs-tx-swing-full = <0x7f>;
+	status = "okay";
+};
+
+&usb3_0 {
+	status = "okay";
+};
+
+&usb_dwc3_0 {
+	dr_mode = "peripheral";
+	maximum-speed = "high-speed";
+	status = "okay";
+};
+
+&usdhc2 {
+	assigned-clocks = <&clk IMX8MP_CLK_USDHC2>;
+	assigned-clock-rates = <400000000>;
+	pinctrl-names = "default", "state_100mhz", "state_200mhz";
+	pinctrl-0 = <&pinctrl_usdhc2>, <&pinctrl_usdhc2_gpio>;
+	pinctrl-1 = <&pinctrl_usdhc2_100mhz>, <&pinctrl_usdhc2_gpio>;
+	pinctrl-2 = <&pinctrl_usdhc2_200mhz>, <&pinctrl_usdhc2_gpio>;
+	cd-gpios = <&gpio2 12 GPIO_ACTIVE_LOW>;
+	vmmc-supply = <&reg_usdhc2_vmmc>;
+	bus-width = <4>;
+	status = "okay";
+};
