@@ -1,7 +1,8 @@
 // SPDX-License-Identifier: (GPL-2.0+ OR MIT)
 /*
- * Copyright 2019 NXP
- * Copyright 2024 EPC Power
+ * Copyright 2025 EPC Power
+ *
+ * Device tree for EPC Power TAU (part: 44-100130)
  */
 
 /dts-v1/;
@@ -14,10 +15,6 @@
 / {
 	model = "EPC Power i.MX8MPlus TAU board";
 	compatible = "fsl,imx8mp";
-
-	aliases {
-		rtc0 = &rtc;
-	};
 
 	chosen {
 		stdout-path = &uart2;
@@ -52,15 +49,6 @@
 	};
 };
 
-&soc {
-	fpga_region0: fpga-region0 {
-		compatible = "fpga-region";
-		fpga-mgr = <&fpga_mgr_spi>;
-		#address-cells = <0x1>;
-		#size-cells = <0x1>;
-	};
-};
-
 &flexspi {
 	pinctrl-names = "default";
 	pinctrl-0 = <&pinctrl_flexspi0>;
@@ -91,22 +79,13 @@
 	cpu-supply = <&buck2>;
 };
 
-&pwm1 {
-	pinctrl-names = "default";
-	pinctrl-0 = <&pinctrl_pwm1>;
-	status = "okay";
-};
-
-&pwm2 {
-	pinctrl-names = "default";
-	pinctrl-0 = <&pinctrl_pwm2>;
-	status = "okay";
-};
-
-&pwm4 {
-	pinctrl-names = "default";
-	pinctrl-0 = <&pinctrl_pwm4>;
-	status = "okay";
+&soc {
+	fpga_region0: fpga-region0 {
+		compatible = "fpga-region";
+		fpga-mgr = <&fpga_mgr_spi>;
+		#address-cells = <0x1>;
+		#size-cells = <0x1>;
+	};
 };
 
 &ecspi1 {
@@ -126,16 +105,9 @@
 };
 
 &ecspi2 {
-	/* FPGA comms */
 	pinctrl-names = "default";
 	pinctrl-0 = <&pinctrl_fpga_spi2>;
 	status = "okay";
-
-	spidev@0 {
-		compatible = "fsl,imx8mn-ecspi", "fsl,imx51-ecspi";
-		spi-max-frequency = <5000000>;
-		reg = <0>;
-	};
 };
 
 &eqos {
@@ -145,25 +117,6 @@
 	phy-handle = <&ethphy0>;
 	fsl,magic-packet;
 	status = "okay";
-
-	mdio {
-		compatible = "snps,dwmac-mdio";
-		#address-cells = <1>;
-		#size-cells = <0>;
-
-		ethphy0: ethernet-phy@0 {
-			reg = <0>;
-			compatible = "ethernet-phy-id0007.0572";
-			reset-gpios = <&gpio4 22 GPIO_ACTIVE_LOW>;  /* ENET_nRST */
-			reset-assert-us = <500>;
-			reset-deassert-us = <500>;
-			interrupt-parent = <&gpio3>;
-			interrupts = <23 IRQ_TYPE_LEVEL_LOW>;  /* ENET_nINT */
-			vsc8531,led-0-mode = <VSC8531_LINK_100_1000_ACTIVITY>;
-			vsc8531,led-1-mode = <VSC8531_LINK_ACTIVITY>;
-			vsc8531,led-0-combine-disable;
-		};
-	};
 };
 
 &fec {
@@ -173,24 +126,6 @@
 	phy-handle = <&ethphy1>;
 	fsl,magic-packet;
 	status = "okay";
-
-	mdio {
-		#address-cells = <1>;
-		#size-cells = <0>;
-
-		ethphy1: ethernet-phy@0 {
-			reg = <0>;
-			compatible = "ethernet-phy-id0007.0572";
-			reset-gpios = <&gpio4 23 GPIO_ACTIVE_LOW>;  /* ENET1_nRST */
-			reset-assert-us = <500>;
-			reset-deassert-us = <500>;
-			interrupt-parent = <&gpio4>;
-			interrupts = <3 IRQ_TYPE_LEVEL_LOW>;  /* ENET1_nINT */
-			vsc8531,led-0-mode = <VSC8531_LINK_100_1000_ACTIVITY>;
-			vsc8531,led-1-mode = <VSC8531_LINK_ACTIVITY>;
-			vsc8531,led-0-combine-disable;
-		};
-	};
 };
 
 &flexcan1 {
@@ -312,162 +247,12 @@
 	pinctrl-names = "default";
 	pinctrl-0 = <&pinctrl_i2c2>;
 	status = "okay";
-
-	/* Real-Time Clock (RTC) with 3V3 backup battery */
-	rtc: rtc@51 {
-		compatible = "nxp,pcf85363";
-		reg = <0x51>;
-    };
-
-	/* Ambient Temp/Humidity Sensor */
-	humidity-sensor@44 {
-		compatible = "ti,hdc3021", "ti,hdc3020";
-		reg = <0x44>;
-	};
 };
 
 &i2c3 {
 	clock-frequency = <400000>;
 	pinctrl-names = "default";
 	pinctrl-0 = <&pinctrl_i2c3>;
-	status = "okay";
-
-	adc@48 {
-		compatible= "ti,ads1115";
-		reg = <0x48>;
-		#address-cells = <1>;
-		#size-cells = <0>;
-
-		channel@4 {
-			reg = <4>;
-			ti,gain = <1>;
-			ti,datarate = <4>;
-		};
-
-		channel@5 {
-			reg = <5>;
-			ti,gain = <1>;
-			ti,datarate = <4>;
-		};
-
-		channel@6 {
-			reg = <6>;
-			ti,gain = <1>;
-			ti,datarate = <4>;
-		};
-
-		channel@7 {
-			reg = <7>;
-			ti,gain = <1>;
-			ti,datarate = <4>;
-		};
-	};
-
-	adc@49 {
-		compatible = "ti,ads1115";
-		reg = <0x49>;
-		#address-cells = <1>;
-		#size-cells = <0>;
-
-		channel@4 {
-			reg = <4>;
-			ti,gain = <1>;
-			ti,datarate = <4>;
-		};
-
-		channel@5 {
-			reg = <5>;
-			ti,gain = <1>;
-			ti,datarate = <4>;
-		};
-
-		channel@6 {
-			reg = <6>;
-			ti,gain = <1>;
-			ti,datarate = <4>;
-		};
-
-		channel@7 {
-			reg = <7>;
-			ti,gain = <1>;
-			ti,datarate = <4>;
-		};
-	};
-
-	adc@4a {
-		compatible = "ti,ads1115";
-		reg = <0x4A>;
-		#address-cells = <1>;
-		#size-cells = <0>;
-
-		channel@4 {
-			reg = <4>;
-			ti,gain = <1>;
-			ti,datarate = <4>;
-		};
-
-		channel@5 {
-			reg = <5>;
-			ti,gain = <1>;
-			ti,datarate = <4>;
-		};
-
-		channel@6 {
-			reg = <6>;
-			ti,gain = <1>;
-			ti,datarate = <4>;
-		};
-
-		channel@7 {
-			reg = <7>;
-			ti,gain = <1>;
-			ti,datarate = <4>;
-		};
-	};
-
-	adc@4b {
-		compatible = "ti,ads1115";
-		reg = <0x4B>;
-		#address-cells = <1>;
-		#size-cells = <0>;
-		channel@4 {
-			reg = <4>;
-			ti,gain = <1>;
-			ti,datarate = <4>;
-		};
-		channel@5 {
-			reg = <5>;
-			ti,gain = <1>;
-			ti,datarate = <4>;
-		};
-		channel@6 {
-			reg = <6>;
-			ti,gain = <1>;
-			ti,datarate = <4>;
-		};
-		channel@7 {
-			reg = <7>;
-			ti,gain = <1>;
-			ti,datarate = <4>;
-		};
-	};
-};
-
-&pwm1 {
-	pinctrl-names = "default";
-	pinctrl-0 = <&pinctrl_pwm1>;
-	status = "okay";
-};
-
-&pwm2 {
-	pinctrl-names = "default";
-	pinctrl-0 = <&pinctrl_pwm2>;
-	status = "okay";
-};
-
-&pwm4 {
-	pinctrl-names = "default";
-	pinctrl-0 = <&pinctrl_pwm4>;
 	status = "okay";
 };
 
@@ -476,48 +261,6 @@
 };
 
 &sdma2 {
-	status = "okay";
-};
-
-&uart1 {
-	/* FPGA UART */
-	pinctrl-names = "default";
-	pinctrl-0 = <&pinctrl_uart1>;
-	status = "okay";
-};
-
-
-&uart2 {
-	/* console */
-	pinctrl-names = "default";
-	pinctrl-0 = <&pinctrl_uart2>;
-	status = "okay";
-};
-
-&uart3 {
-	/* spare */
-	pinctrl-names = "default";
-	pinctrl-0 = <&pinctrl_uart3>;
-	status = "disabled";
-};
-
-&usb3_phy0 {
-	fsl,phy-tx-vref-tune = <0xe>;
-	fsl,phy-tx-preemp-amp-tune = <3>;
-	fsl,phy-tx-vboost-level = <5>;
-	fsl,phy-comp-dis-tune = <7>;
-	fsl,pcs-tx-deemph-3p5db = <0x21>;
-	fsl,phy-pcs-tx-swing-full = <0x7f>;
-	status = "okay";
-};
-
-&usb3_0 {
-	status = "okay";
-};
-
-&usb_dwc3_0 {
-	dr_mode = "peripheral";
-	maximum-speed = "high-speed";
 	status = "okay";
 };
 
@@ -554,24 +297,6 @@
 };
 
 &iomuxc {
-	pinctrl_pwm1: pwm1grp {
-		fsl,pins = <
-			MX8MP_IOMUXC_GPIO1_IO01__PWM1_OUT	0x116
-		>;
-	};
-
-	pinctrl_pwm2: pwm2grp {
-		fsl,pins = <
-			MX8MP_IOMUXC_GPIO1_IO11__PWM2_OUT	0x116
-		>;
-	};
-
-	pinctrl_pwm4: pwm4grp {
-		fsl,pins = <
-			MX8MP_IOMUXC_SAI5_RXFS__PWM4_OUT	0x116
-		>;
-	};
-
 	pinctrl_fpga_spi1: fpgaspi1grp {
 		fsl,pins = <
 			MX8MP_IOMUXC_ECSPI1_SCLK__ECSPI1_SCLK	0x156
@@ -698,24 +423,6 @@
 	pinctrl_pmic: pmicgrp {
 		fsl,pins = <
 			MX8MP_IOMUXC_GPIO1_IO03__GPIO1_IO03	0x000001c0
-		>;
-	};
-
-	pinctrl_pwm1: pwm1grp {
-		fsl,pins = <
-			MX8MP_IOMUXC_GPIO1_IO01__PWM1_OUT	0x116
-		>;
-	};
-
-	pinctrl_pwm2: pwm2grp {
-		fsl,pins = <
-			MX8MP_IOMUXC_GPIO1_IO11__PWM2_OUT	0x116
-		>;
-	};
-
-	pinctrl_pwm4: pwm4grp {
-		fsl,pins = <
-			MX8MP_IOMUXC_SAI5_RXFS__PWM4_OUT	0x116
 		>;
 	};
 
