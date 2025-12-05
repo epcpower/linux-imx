@@ -297,6 +297,14 @@
 };
 
 &iomuxc {
+	pinctrl_hwid: hwidgrp {
+		fsl,pins = <
+			MX8MP_IOMUXC_GPIO1_IO06__GPIO1_IO06		0x128  /* TAU-HW-ID0 */
+			MX8MP_IOMUXC_GPIO1_IO05__GPIO1_IO05		0x128  /* TAU-HW-ID1 */
+			MX8MP_IOMUXC_GPIO1_IO14__GPIO1_IO14		0x128  /* TAU-HW-ID2 */
+		>;
+	};
+
 	pinctrl_fpga_spi1: fpgaspi1grp {
 		fsl,pins = <
 			MX8MP_IOMUXC_ECSPI1_SCLK__ECSPI1_SCLK	0x156

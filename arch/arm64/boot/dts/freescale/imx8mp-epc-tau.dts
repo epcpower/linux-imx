@@ -13,6 +13,17 @@
 	aliases {
 		rtc0 = &rtc;
 	};
+
+	// Added in MOAB rev2
+	hw_id: hw-id {
+		pinctrl-names = "default";
+		pinctrl-0 = <&pinctrl_hwid>;
+		compatible = "epcpower,hw-id";
+		id-gpios = <&gpio1 6 GPIO_ACTIVE_LOW>,
+				<&gpio1 5 GPIO_ACTIVE_LOW>,
+				<&gpio1 14 GPIO_ACTIVE_LOW>;
+		id-width = <3>;
+	};
 };
 
 &ecspi1 {
@@ -78,16 +89,56 @@
 };
 
 &i2c2 {
-	/* Real-Time Clock (RTC) with 3V3 backup battery */
-	rtc: rtc@51 {
-		compatible = "nxp,pcf85363";
-		reg = <0x51>;
-    };
+	// PCF85363 was replaced by higher temperature variant in MOAB rev2
+	// /* Real-Time Clock (RTC) with 3V3 backup battery */
+	// rtc: rtc@51 {
+	// 	compatible = "nxp,pcf85363";
+	// 	reg = <0x51>;
+	// 	status = "disabled";
+    // };
+
+	/* RTC - MCP7940NT (high temp grade) */
+	rtc: rtc@6f {
+		compatible = "microchip,mcp7940x";
+		reg = <0x6f>;
+	};
 
 	/* Ambient Temp/Humidity Sensor */
 	humidity-sensor@44 {
 		compatible = "ti,hdc3021", "ti,hdc3020";
 		reg = <0x44>;
+	};
+
+	// Added in MOAB rev2
+	adc@48 {
+		compatible= "ti,ads1115";
+		reg = <0x48>;
+		#address-cells = <1>;
+		#size-cells = <0>;
+
+		channel@4 {
+			reg = <4>;
+			ti,gain = <1>;
+			ti,datarate = <4>;
+		};
+
+		channel@5 {
+			reg = <5>;
+			ti,gain = <1>;
+			ti,datarate = <4>;
+		};
+
+		channel@6 {
+			reg = <6>;
+			ti,gain = <1>;
+			ti,datarate = <4>;
+		};
+
+		channel@7 {
+			reg = <7>;
+			ti,gain = <1>;
+			ti,datarate = <4>;
+		};
 	};
 };
 
