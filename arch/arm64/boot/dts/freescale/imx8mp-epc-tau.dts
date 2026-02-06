@@ -2,7 +2,7 @@
 /*
  * Copyright 2025 EPC Power
  * 
- * Device tree for EPC Power MOAB
+ * Device tree for EPC Power MOAB (part: 44-100131) rev1
  */
 
 /dts-v1/;
