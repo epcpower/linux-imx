@@ -1,0 +1,68 @@
+/dts-v1/;
+/plugin/;
+
+// SPDX-License-Identifier: (GPL-2.0+ OR MIT)
+/*
+ * Device tree overlay for EPC Power MOAB (part: 44-100131) rev1
+ *
+ * Copyright 2026 EPC Power
+ *
+ * Changes:
+ *  - Added 3 bit MOAB HWID GPIOs. MOAB HWID for gen1/rev1 is 0 and
+ *    and for gen2/rev1 its 1.
+ *  - Replaced RTC with higher temp rated part, MCP7940NT-E/MS. 7 bit address
+ *    is 0x6F on I2C2 line.
+ *  - Added another ADC for 2x 4-20mA temperature sensors with 7 bit address
+ *    is 0x48 on I2C2 line, same line as temp/humid sensor and RTC.
+ *    Measurement names are XFMR-TEMP1 and XFMR-TEMP2.
+ *  - Added ADC_24V_AUX measurement to ADC with 7 bit address of 0x4A on I2C3
+ *    line.
+ *  - Removed T_AMB_HUMID measurement from ADC with 7 bit address of 0x4B on
+ *    I2C3 line.
+ */
+
+&{/soc@0/bus@30800000/i2c@30a30000/rtc@51} {
+    status = "disabled";
+};
+
+&i2c2 {
+    #address-cells = <1>;
+    #size-cells = <0>;
+
+    rtc: rtc@6f {
+        compatible = "microchip,mcp7940x";
+        reg = <0x6f>;
+    };
+
+    // ADC added to support new temperature sensors (XFMR-TEMP1 and XFMR-TEMP2)
+    adc@48 {
+        compatible= "ti,ads1115";
+        reg = <0x48>;
+        #address-cells = <1>;
+        #size-cells = <0>;
+
+        channel@4 {
+            reg = <4>;
+            ti,gain = <1>;
+            ti,datarate = <4>;
+        };
+
+        channel@5 {
+            reg = <5>;
+            ti,gain = <1>;
+            ti,datarate = <4>;
+        };
+
+        channel@6 {
+            reg = <6>;
+            ti,gain = <1>;
+            ti,datarate = <4>;
+        };
+
+        channel@7 {
+            reg = <7>;
+            ti,gain = <1>;
+            ti,datarate = <4>;
+        };
+    };
+};
