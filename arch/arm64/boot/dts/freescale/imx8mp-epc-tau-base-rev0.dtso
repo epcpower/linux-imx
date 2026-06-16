@@ -1,0 +1,43 @@
+/dts-v1/;
+/plugin/;
+
+// SPDX-License-Identifier: (GPL-2.0+ OR MIT)
+/*
+ * Device tree overlay for EPC Power MOAB (part: 44-100131) all revisions
+ *
+ * Copyright 2026 EPC Power
+ *
+ * Changes between MOAB gen1 rev1 -> gen2 rev1 :
+ *  - Added 3 bit MOAB HWID GPIOs. MOAB HWID for gen1/rev1 is 0 and
+ *    and for gen2/rev1 its 1.
+ *  - Replaced RTC with higher temp rated part, MCP7940NT-E/MS. 7 bit address
+ *    is 0x6F on I2C2 line.
+ *  - Added another ADC for 2x 4-20mA temperature sensors with 7 bit address
+ *    is 0x48 on I2C2 line, same line as temp/humid sensor and RTC.
+ *    Measurement names are XFMR-TEMP1 and XFMR-TEMP2.
+ *  - Added ADC_24V_AUX measurement to ADC with 7 bit address of 0x4A on I2C3
+ *    line.
+ *  - Removed T_AMB_HUMID measurement from ADC with 7 bit address of 0x4B on
+ *    I2C3 line.
+ */
+
+// Part MCP7940NT-E/MS replaced pcf85363 in MOAB gen2 rev1
+&{/soc@0/bus@30800000/i2c@30a30000/rtc@6f} {
+    status = "disabled";
+};
+
+// ADC with 0x48 address was added in MOAB gen2 rev1
+&{/soc@0/bus@30800000/i2c@30a30000/adc@48} {
+    status = "disabled";
+};
+
+&i2c2 {
+    #address-cells = <1>;
+    #size-cells = <0>;
+
+	/* Real-Time Clock (RTC) with 3V3 backup battery */
+	rtc: rtc@51 {
+		compatible = "nxp,pcf85363";
+		reg = <0x51>;
+    };
+};
