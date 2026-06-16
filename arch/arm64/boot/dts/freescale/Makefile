@@ -168,8 +168,8 @@ imx8mp-evk-revb4-8mic-revE-dtbs := imx8mp-evk-revA3-8mic-revE.dtb imx8mp-evk-rev
 imx8mp-ddr4-evk-revb4-dtbs := imx8mp-ddr4-evk.dtb imx8mp-evk-revb4.dtbo
 imx8mp-evk-revb4-ndm-dtbs := imx8mp-evk-ndm.dtb imx8mp-evk-revb4.dtbo
 
-imx8mp-epc-tau-base-rev1-dtbs := imx8mp-epc-tau.dtb imx8mp-epc-tau-base-rev1.dtbo
-dtb-$(CONFIG_ARCH_MXC) += imx8mp-epc-tau-base-rev1.dtb
+imx8mp-epc-tau-base-rev0-dtbs := imx8mp-epc-tau.dtb imx8mp-epc-tau-base-rev0.dtbo
+dtb-$(CONFIG_ARCH_MXC) += imx8mp-epc-tau-base-rev0.dtb
 
 dtb-$(CONFIG_ARCH_MXC) += imx8mp-evk-revb4.dtb
 dtb-$(CONFIG_ARCH_MXC) += imx8mp-evk-revb4-rm67191.dtb
