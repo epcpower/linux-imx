@@ -1,26 +1,15 @@
 // SPDX-License-Identifier: (GPL-2.0+ OR MIT)
 /*
- * Device tree for EPC Power TAU base board (MOAB)
- *
  * Copyright 2026 EPC Power
  *
- * CHANGELOG:
+ * Device tree for EPC Power TAU base board (MOAB)
  *
- * rev1 (gen2):
- *  - Added 3 bit MOAB HWID GPIOs. MOAB HWID for gen1/rev1 is 0 and
- *    and for gen2/rev1 its 1.
- *  - Replaced RTC with higher temp rated part, MCP7940NT-E/MS. 7 bit address
- *    is 0x6F on I2C2 line.
- *  - Added another ADC for 2x 4-20mA temperature sensors with 7 bit address
- *    is 0x48 on I2C2 line, same line as temp/humid sensor and RTC.
- *    Measurement names are XFMR-TEMP1 and XFMR-TEMP2.
- *  - Added ADC_24V_AUX measurement to ADC with 7 bit address of 0x4A on I2C3
- *    line.
- *  - Removed T_AMB_HUMID measurement from ADC with 7 bit address of 0x4B on
- *    I2C3 line.
+ * Part Number: 44-100161
+ * Compatible Revisions: rev1
  *
- * rev0 (gen1):
- *  - n/a
+ * This is the default device tree that reflects the latest known
+ * hardware revision. If there are new peripherals added, you should
+ * add them here. For legacy support, use overlays.
  */
 
 /dts-v1/;

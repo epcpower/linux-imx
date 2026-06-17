@@ -1,8 +1,15 @@
 // SPDX-License-Identifier: (GPL-2.0+ OR MIT)
 /*
- * Copyright 2025 EPC Power
+ * Copyright 2026 EPC Power
  *
- * Device tree for EPC Power TAU (part: 44-100130)
+ * Device tree for EPC Power TAU processor board
+ *
+ * Part Number: 44-100130
+ * Compatible Revisions: rev1
+ *
+ * This is the default device tree that reflects the latest known
+ * hardware revision. If there are new peripherals added, you should
+ * add them here. For legacy support, use overlays.
  */
 
 /dts-v1/;
