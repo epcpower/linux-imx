@@ -11,7 +11,7 @@
 
 / {
 	aliases {
-		rtc0 = &rtc;
+		rtc1 = &rtc;
 	};
 };
 
